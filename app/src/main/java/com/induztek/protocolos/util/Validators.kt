@@ -15,4 +15,20 @@ object Validators {
         password.length < 6 -> "Debe tener al menos 6 caracteres"
         else -> null
     }
+    private val codigoRegex = Regex("^[A-Za-z]{2,4}-\\d{2,6}$")
+
+    fun validateCodigo(codigo: String): String? = when {
+        codigo.isBlank() -> "El código es obligatorio"
+        !codigoRegex.matches(codigo.trim()) -> "Formato inválido, por ejemplo TR-1042"
+        else -> null
+    }
+
+    fun validateTipo(tipo: String): String? =
+        if (tipo.isBlank()) "Selecciona un tipo de equipo" else null
+
+    fun validateInstalacion(instalacion: String): String? = when {
+        instalacion.isBlank() -> "La instalación es obligatoria"
+        instalacion.trim().length < 3 -> "Debe tener al menos 3 caracteres"
+        else -> null
+    }
 }
