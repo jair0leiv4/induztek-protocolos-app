@@ -1,14 +1,17 @@
 package com.induztek.protocolos.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.induztek.protocolos.data.ProtocolosRepository
+import com.induztek.protocolos.model.Prueba
+import com.induztek.protocolos.util.Fechas
 import com.induztek.protocolos.util.Validators
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import kotlinx.coroutines.launch
 
 data class PruebaUiState(
     val codigoEquipo: String = "",
@@ -21,13 +24,12 @@ data class PruebaUiState(
     val fechaHoraError: String? = null
 )
 
-class PruebaViewModel : ViewModel() {
+class PruebaViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _uiState = MutableStateFlow(PruebaUiState(fechaHora = ahora()))
+    private val repository = ProtocolosRepository.crear(application)
+
+    private val _uiState = MutableStateFlow(PruebaUiState(fechaHora = Fechas.formatear(System.currentTimeMillis())))
     val uiState: StateFlow<PruebaUiState> = _uiState.asStateFlow()
-
-    private fun ahora(): String =
-        SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(Date())
 
     fun onCodigoEquipoChange(value: String) {
         _uiState.update { it.copy(codigoEquipo = value, codigoEquipoError = null) }
@@ -59,7 +61,26 @@ class PruebaViewModel : ViewModel() {
                 fechaHoraError = fechaError
             )
         }
-        if (codigoError == null && tensionError == null && aislacionError == null && fechaError == null) {
+        if (codigoError != null || tensionError != null || aislacionError != null || fechaError != null) return
+
+        viewModelScope.launch {
+            val codigo = s.codigoEquipo.trim().uppercase()
+            if (!repository.existeEquipo(codigo)) {
+                _uiState.update { it.copy(codigoEquipoError = "Ese equipo no está registrado") }
+                return@launch
+            }
+            val tension = s.tension.trim().replace(',', '.').toDoubleOrNull() ?: return@launch
+            val aislacion = s.aislacion.trim().replace(',', '.').toDoubleOrNull() ?: return@launch
+            val fechaMillis = Fechas.aMillis(s.fechaHora) ?: return@launch
+
+            repository.guardarPrueba(
+                Prueba(
+                    codigoEquipo = codigo,
+                    tension = tension,
+                    aislacion = aislacion,
+                    fechaMillis = fechaMillis
+                )
+            )
             onSuccess()
         }
     }

@@ -1,11 +1,16 @@
 package com.induztek.protocolos.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.induztek.protocolos.data.ProtocolosRepository
+import com.induztek.protocolos.model.Equipo
 import com.induztek.protocolos.util.Validators
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class EquipoUiState(
     val codigo: String = "",
@@ -16,7 +21,9 @@ data class EquipoUiState(
     val instalacionError: String? = null
 )
 
-class EquipoViewModel : ViewModel() {
+class EquipoViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = ProtocolosRepository.crear(application)
 
     private val _uiState = MutableStateFlow(EquipoUiState())
     val uiState: StateFlow<EquipoUiState> = _uiState.asStateFlow()
@@ -52,6 +59,21 @@ class EquipoViewModel : ViewModel() {
                 instalacionError = instalacionError
             )
         }
-        if (codigoError == null && tipoError == null && instalacionError == null) onSuccess()
+        if (codigoError == null && tipoError == null && instalacionError == null) {
+            viewModelScope.launch {
+                val guardado = repository.guardarEquipo(
+                    Equipo(
+                        codigo = s.codigo.trim().uppercase(),
+                        tipo = s.tipo,
+                        instalacion = s.instalacion.trim()
+                    )
+                )
+                if (guardado) {
+                    onSuccess()
+                } else {
+                    _uiState.update { it.copy(codigoError = "Ya existe un equipo con ese código") }
+                }
+            }
+        }
     }
 }

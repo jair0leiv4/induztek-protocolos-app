@@ -1,5 +1,6 @@
 package com.induztek.protocolos.data
 
+import android.content.Context
 import com.induztek.protocolos.model.Equipo
 import com.induztek.protocolos.model.Prueba
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +23,11 @@ class ProtocolosRepository(
 
     fun pruebasDe(codigo: String): Flow<List<Prueba>> =
         pruebaDao.observarPorEquipo(codigo)
+
+    companion object {
+        fun crear(context: Context): ProtocolosRepository {
+            val db = AppDatabase.obtener(context)
+            return ProtocolosRepository(db.equipoDao(), db.pruebaDao())
+        }
+    }
 }
