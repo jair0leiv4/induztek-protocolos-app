@@ -22,5 +22,6 @@ data class Prueba(
     val codigoEquipo: String,
     val tension: Double,
     val aislacion: Double,
-    val fechaMillis: Long
+    val fechaMillis: Long,
+    val fotoPath: String? = null
 )

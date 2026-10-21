@@ -18,6 +18,7 @@ data class PruebaUiState(
     val tension: String = "",
     val aislacion: String = "",
     val fechaHora: String = "",
+    val fotoPath: String? = null,
     val codigoEquipoError: String? = null,
     val tensionError: String? = null,
     val aislacionError: String? = null,
@@ -45,6 +46,10 @@ class PruebaViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onFechaHoraChange(value: String) {
         _uiState.update { it.copy(fechaHora = value, fechaHoraError = null) }
+    }
+
+    fun onFotoCapturada(ruta: String) {
+        _uiState.update { it.copy(fotoPath = ruta) }
     }
 
     fun onGuardarClick(onSuccess: () -> Unit) {
@@ -78,7 +83,8 @@ class PruebaViewModel(application: Application) : AndroidViewModel(application) 
                     codigoEquipo = codigo,
                     tension = tension,
                     aislacion = aislacion,
-                    fechaMillis = fechaMillis
+                    fechaMillis = fechaMillis,
+                    fotoPath = s.fotoPath
                 )
             )
             onSuccess()

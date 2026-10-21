@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.induztek.protocolos.ui.components.BotonAnimado
 import com.induztek.protocolos.ui.components.CampoValidado
+import com.induztek.protocolos.ui.components.SelectorFoto
 import com.induztek.protocolos.viewmodel.MainViewModel
 import com.induztek.protocolos.viewmodel.PruebaViewModel
 
@@ -75,7 +76,14 @@ fun NuevaPruebaScreen(
             error = state.fechaHoraError
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+
+        SelectorFoto(
+            fotoPath = state.fotoPath,
+            onFotoCapturada = pruebaViewModel::onFotoCapturada
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         BotonAnimado(
             texto = "Guardar prueba",
