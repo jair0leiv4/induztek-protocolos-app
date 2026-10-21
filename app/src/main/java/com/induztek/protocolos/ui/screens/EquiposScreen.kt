@@ -47,7 +47,7 @@ fun EquiposScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(equipos, key = { it.codigo }) { equipo ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
+                    Card(modifier = Modifier.fillMaxWidth().animateItem()) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = equipo.codigo, style = MaterialTheme.typography.titleMedium)
                             Text(text = equipo.tipo, style = MaterialTheme.typography.bodyMedium)

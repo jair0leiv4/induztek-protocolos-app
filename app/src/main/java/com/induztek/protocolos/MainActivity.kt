@@ -4,6 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -55,7 +60,15 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Login.route,
-                        modifier = Modifier.padding(paddingValues = innerPadding)
+                        modifier = Modifier.padding(paddingValues = innerPadding),
+                        enterTransition = {
+                            fadeIn(tween(300)) + slideInHorizontally(tween(300)) { it / 6 }
+                        },
+                        exitTransition = { fadeOut(tween(200)) },
+                        popEnterTransition = { fadeIn(tween(300)) },
+                        popExitTransition = {
+                            fadeOut(tween(200)) + slideOutHorizontally(tween(300)) { it / 6 }
+                        }
                     ) {
                         composable(route = Screen.Login.route) { LoginScreen(viewModel) }
                         composable(route = Screen.Equipos.route) { EquiposScreen(viewModel) }
