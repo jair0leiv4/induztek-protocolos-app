@@ -19,6 +19,8 @@ data class PruebaUiState(
     val aislacion: String = "",
     val fechaHora: String = "",
     val fotoPath: String? = null,
+    val latitud: Double? = null,
+    val longitud: Double? = null,
     val codigoEquipoError: String? = null,
     val tensionError: String? = null,
     val aislacionError: String? = null,
@@ -50,6 +52,10 @@ class PruebaViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onFotoCapturada(ruta: String) {
         _uiState.update { it.copy(fotoPath = ruta) }
+    }
+
+    fun onUbicacionCapturada(latitud: Double, longitud: Double) {
+        _uiState.update { it.copy(latitud = latitud, longitud = longitud) }
     }
 
     fun onGuardarClick(onSuccess: () -> Unit) {
@@ -84,7 +90,9 @@ class PruebaViewModel(application: Application) : AndroidViewModel(application) 
                     tension = tension,
                     aislacion = aislacion,
                     fechaMillis = fechaMillis,
-                    fotoPath = s.fotoPath
+                    fotoPath = s.fotoPath,
+                    latitud = s.latitud,
+                    longitud = s.longitud
                 )
             )
             onSuccess()

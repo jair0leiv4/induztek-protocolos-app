@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.induztek.protocolos.ui.components.BotonAnimado
 import com.induztek.protocolos.ui.components.CampoValidado
 import com.induztek.protocolos.ui.components.SelectorFoto
+import com.induztek.protocolos.ui.components.SelectorUbicacion
 import com.induztek.protocolos.viewmodel.MainViewModel
 import com.induztek.protocolos.viewmodel.PruebaViewModel
 
@@ -77,6 +78,14 @@ fun NuevaPruebaScreen(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
+        SelectorUbicacion(
+            latitud = state.latitud,
+            longitud = state.longitud,
+            onUbicacionCapturada = pruebaViewModel::onUbicacionCapturada
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         SelectorFoto(
             fotoPath = state.fotoPath,

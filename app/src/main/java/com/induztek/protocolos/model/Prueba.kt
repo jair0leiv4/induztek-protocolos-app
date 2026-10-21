@@ -23,5 +23,7 @@ data class Prueba(
     val tension: Double,
     val aislacion: Double,
     val fechaMillis: Long,
-    val fotoPath: String? = null
+    val fotoPath: String? = null,
+    val latitud: Double? = null,
+    val longitud: Double? = null
 )
