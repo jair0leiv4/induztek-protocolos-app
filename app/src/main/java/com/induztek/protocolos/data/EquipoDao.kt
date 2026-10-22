@@ -1,9 +1,11 @@
 package com.induztek.protocolos.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.induztek.protocolos.model.Equipo
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +14,12 @@ interface EquipoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertar(equipo: Equipo): Long
+
+    @Update
+    suspend fun actualizar(equipo: Equipo): Int
+
+    @Delete
+    suspend fun eliminar(equipo: Equipo): Int
 
     @Query("SELECT * FROM equipos ORDER BY codigo")
     fun observarTodos(): Flow<List<Equipo>>
