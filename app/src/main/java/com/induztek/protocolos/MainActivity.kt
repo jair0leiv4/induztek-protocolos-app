@@ -24,6 +24,7 @@ import com.induztek.protocolos.ui.screens.EquiposScreen
 import com.induztek.protocolos.ui.screens.LoginScreen
 import com.induztek.protocolos.ui.screens.NuevaPruebaScreen
 import com.induztek.protocolos.ui.screens.NuevoEquipoScreen
+import com.induztek.protocolos.ui.screens.UsuarioFormScreen
 import com.induztek.protocolos.ui.screens.UsuarioListScreen
 import com.induztek.protocolos.ui.theme.InduztekProtocolosTheme
 import com.induztek.protocolos.viewmodel.MainViewModel
@@ -76,6 +77,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.NuevoEquipo.route) { NuevoEquipoScreen(viewModel) }
                         composable(route = Screen.NuevaPrueba.route) { NuevaPruebaScreen(viewModel) }
                         composable(route = Screen.Usuarios.route) { UsuarioListScreen(viewModel) }
+                        composable(route = Screen.FormularioUsuario.route) { UsuarioFormScreen(viewModel) }
                     }
                 }
             }
