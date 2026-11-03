@@ -10,7 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.induztek.protocolos.model.Rol
 import com.induztek.protocolos.navigation.Screen
+import com.induztek.protocolos.util.Sesion
 import com.induztek.protocolos.viewmodel.EquiposViewModel
 import com.induztek.protocolos.viewmodel.MainViewModel
 
@@ -20,6 +22,8 @@ fun EquiposScreen(
     equiposViewModel: EquiposViewModel = viewModel()
 ) {
     val equipos by equiposViewModel.equipos.collectAsState()
+    val sesion by Sesion.usuario.collectAsState()
+    val esAdmin = sesion?.obtenerRol() == Rol.ADMIN
 
     Column(
         modifier = Modifier
@@ -27,6 +31,13 @@ fun EquiposScreen(
             .padding(24.dp)
     ) {
         Text(text = "Tus equipos", style = MaterialTheme.typography.headlineMedium)
+        sesion?.let {
+            Text(
+                text = "Sesión: ${it.nombre} · ${it.obtenerRol().etiqueta}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
         Text(
             text = "${equipos.size} registrados",
             style = MaterialTheme.typography.bodyMedium,
@@ -76,6 +87,16 @@ fun EquiposScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Nueva prueba")
+        }
+
+        if (esAdmin) {
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { mainViewModel.navigateTo(Screen.Usuarios) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Usuarios")
+            }
         }
     }
 }
