@@ -16,7 +16,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 fun BotonAnimado(
     texto: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val presionado by interactionSource.collectIsPressedAsState()
@@ -28,6 +29,7 @@ fun BotonAnimado(
 
     Button(
         onClick = onClick,
+        enabled = enabled,
         interactionSource = interactionSource,
         modifier = modifier.graphicsLayer {
             scaleX = escala

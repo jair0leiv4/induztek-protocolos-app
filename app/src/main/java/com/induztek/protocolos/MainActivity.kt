@@ -9,10 +9,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -26,6 +32,7 @@ import com.induztek.protocolos.ui.screens.NuevaPruebaScreen
 import com.induztek.protocolos.ui.screens.NuevoEquipoScreen
 import com.induztek.protocolos.ui.theme.InduztekProtocolosTheme
 import com.induztek.protocolos.viewmodel.MainViewModel
+import com.induztek.protocolos.viewmodel.SesionViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
@@ -34,11 +41,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InduztekProtocolosTheme {
-                // La profesora (ViewModel) y el control remoto de las puertas (navController)
                 val viewModel: MainViewModel = viewModel()
+                val sesionViewModel: SesionViewModel = viewModel()
+                val sesionUi by sesionViewModel.estado.collectAsState()
                 val navController = rememberNavController()
 
-                // El portero: se queda escuchando el buzón
+                // El portero: escucha el buzón de navegación
                 LaunchedEffect(key1 = Unit) {
                     viewModel.navigationEvents.collectLatest { event ->
                         when (event) {
@@ -55,25 +63,39 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                // El edificio: dice qué pantalla corresponde a cada dirección
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Login.route,
-                        modifier = Modifier.padding(paddingValues = innerPadding),
-                        enterTransition = {
-                            fadeIn(tween(300)) + slideInHorizontally(tween(300)) { it / 6 }
-                        },
-                        exitTransition = { fadeOut(tween(200)) },
-                        popEnterTransition = { fadeIn(tween(300)) },
-                        popExitTransition = {
-                            fadeOut(tween(200)) + slideOutHorizontally(tween(300)) { it / 6 }
+                    if (sesionUi.cargando) {
+                        // Esperando a que DataStore responda si hay una sesión guardada
+                        Box(
+                            modifier = Modifier.fillMaxSize().padding(innerPadding),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
                         }
-                    ) {
-                        composable(route = Screen.Login.route) { LoginScreen(viewModel) }
-                        composable(route = Screen.Equipos.route) { EquiposScreen(viewModel) }
-                        composable(route = Screen.NuevoEquipo.route) { NuevoEquipoScreen(viewModel) }
-                        composable(route = Screen.NuevaPrueba.route) { NuevaPruebaScreen(viewModel) }
+                    } else {
+                        // Pantalla inicial: si hay sesión guardada va directo a Equipos, si no, al Login
+                        val inicio = remember {
+                            if (sesionUi.sesion != null) Screen.Equipos.route else Screen.Login.route
+                        }
+
+                        NavHost(
+                            navController = navController,
+                            startDestination = inicio,
+                            modifier = Modifier.padding(paddingValues = innerPadding),
+                            enterTransition = {
+                                fadeIn(tween(300)) + slideInHorizontally(tween(300)) { it / 6 }
+                            },
+                            exitTransition = { fadeOut(tween(200)) },
+                            popEnterTransition = { fadeIn(tween(300)) },
+                            popExitTransition = {
+                                fadeOut(tween(200)) + slideOutHorizontally(tween(300)) { it / 6 }
+                            }
+                        ) {
+                            composable(route = Screen.Login.route) { LoginScreen(viewModel) }
+                            composable(route = Screen.Equipos.route) { EquiposScreen(viewModel, sesionViewModel) }
+                            composable(route = Screen.NuevoEquipo.route) { NuevoEquipoScreen(viewModel) }
+                            composable(route = Screen.NuevaPrueba.route) { NuevaPruebaScreen(viewModel) }
+                        }
                     }
                 }
             }
