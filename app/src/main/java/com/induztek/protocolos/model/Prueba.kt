@@ -25,5 +25,6 @@ data class Prueba(
     val fechaMillis: Long,
     val fotoPath: String? = null,
     val latitud: Double? = null,
-    val longitud: Double? = null
+    val longitud: Double? = null,
+    val registradaPor: String = ""
 )
