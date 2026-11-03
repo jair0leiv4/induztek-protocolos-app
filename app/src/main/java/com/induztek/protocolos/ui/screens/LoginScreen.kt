@@ -61,6 +61,20 @@ fun LoginScreen(
             esPassword = true
         )
 
+        if (state.loginError != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = state.loginError ?: "",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        if (state.cargando) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Verificando…", style = MaterialTheme.typography.bodySmall)
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
         BotonAnimado(
