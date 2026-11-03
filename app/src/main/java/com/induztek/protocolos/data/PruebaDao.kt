@@ -23,6 +23,9 @@ interface PruebaDao {
     @Query("SELECT * FROM pruebas WHERE id = :id")
     suspend fun buscarPorId(id: Long): Prueba?
 
+    @Query("SELECT * FROM pruebas ORDER BY fechaMillis DESC")
+    fun observarTodas(): Flow<List<Prueba>>
+
     @Query("SELECT * FROM pruebas WHERE codigoEquipo = :codigo ORDER BY fechaMillis DESC")
     fun observarPorEquipo(codigo: String): Flow<List<Prueba>>
 }

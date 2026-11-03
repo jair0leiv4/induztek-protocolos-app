@@ -6,10 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.induztek.protocolos.model.Equipo
 import com.induztek.protocolos.model.Prueba
+import com.induztek.protocolos.model.TipoEquipo
+import com.induztek.protocolos.model.Usuario
 
-@Database(entities = [Equipo::class, Prueba::class], version = 3, exportSchema = false)
+@Database(
+    entities = [Usuario::class, TipoEquipo::class, Equipo::class, Prueba::class],
+    version = 4,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun usuarioDao(): UsuarioDao
+    abstract fun tipoEquipoDao(): TipoEquipoDao
     abstract fun equipoDao(): EquipoDao
     abstract fun pruebaDao(): PruebaDao
 
