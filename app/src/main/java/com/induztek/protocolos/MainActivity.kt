@@ -24,6 +24,7 @@ import com.induztek.protocolos.ui.screens.EquiposScreen
 import com.induztek.protocolos.ui.screens.LoginScreen
 import com.induztek.protocolos.ui.screens.NuevaPruebaScreen
 import com.induztek.protocolos.ui.screens.NuevoEquipoScreen
+import com.induztek.protocolos.ui.screens.UsuarioListScreen
 import com.induztek.protocolos.ui.theme.InduztekProtocolosTheme
 import com.induztek.protocolos.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -74,6 +75,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.Equipos.route) { EquiposScreen(viewModel) }
                         composable(route = Screen.NuevoEquipo.route) { NuevoEquipoScreen(viewModel) }
                         composable(route = Screen.NuevaPrueba.route) { NuevaPruebaScreen(viewModel) }
+                        composable(route = Screen.Usuarios.route) { UsuarioListScreen(viewModel) }
                     }
                 }
             }
