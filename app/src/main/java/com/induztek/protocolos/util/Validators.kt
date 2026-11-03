@@ -64,4 +64,13 @@ object Validators {
             "La fecha u hora no existe"
         }
     }
+
+    fun validateNombre(nombre: String): String? = when {
+        nombre.isBlank() -> "El nombre es obligatorio"
+        nombre.trim().length < 3 -> "Debe tener al menos 3 caracteres"
+        else -> null
+    }
+
+    fun validateRolUsuario(rol: String): String? =
+        if (rol.isBlank()) "Selecciona un tipo de usuario" else null
 }
