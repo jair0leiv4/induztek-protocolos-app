@@ -8,7 +8,7 @@ import com.induztek.protocolos.model.Usuario
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-// Archivo de preferencias llamado "sesion", guardado en el almacenamiento privado de la app
+// DataStore: archivo de preferencias llamado "sesion", en el almacenamiento privado de la app
 private val Context.sesionDataStore by preferencesDataStore(name = "sesion")
 
 // Lo que recordamos de quien inició sesión

@@ -4,8 +4,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+// Reglas de validación. No dependen de ninguna pantalla: devuelven el mensaje de error o null si está bien.
 object Validators {
 
+    // ---------- Login y usuarios ----------
     private val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
 
     fun validateEmail(email: String): String? = when {
@@ -19,6 +21,17 @@ object Validators {
         password.length < 6 -> "Debe tener al menos 6 caracteres"
         else -> null
     }
+
+    fun validateNombre(nombre: String): String? = when {
+        nombre.isBlank() -> "El nombre es obligatorio"
+        nombre.trim().length < 3 -> "Debe tener al menos 3 caracteres"
+        else -> null
+    }
+
+    fun validateRol(rol: String): String? =
+        if (rol.isBlank()) "Selecciona un rol" else null
+
+    // ---------- Equipos ----------
     private val codigoRegex = Regex("^[A-Za-z]{2,4}-\\d{2,6}$")
 
     fun validateCodigo(codigo: String): String? = when {
@@ -35,6 +48,12 @@ object Validators {
         instalacion.trim().length < 3 -> "Debe tener al menos 3 caracteres"
         else -> null
     }
+
+    // ---------- Pruebas ----------
+    fun validateEquipoSeleccion(codigo: String): String? =
+        if (codigo.isBlank()) "Selecciona un equipo" else null
+
+    // Acepta coma o punto como separador decimal
     private fun parseNumero(texto: String): Double? =
         texto.trim().replace(',', '.').toDoubleOrNull()
 
