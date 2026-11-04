@@ -29,6 +29,7 @@ import androidx.navigation.navArgument
 import com.induztek.protocolos.navigation.NavigationEvent
 import com.induztek.protocolos.navigation.Screen
 import com.induztek.protocolos.ui.components.LocalAnchoVentana
+import com.induztek.protocolos.ui.screens.EquipoDetalleScreen
 import com.induztek.protocolos.ui.screens.EquipoFormScreen
 import com.induztek.protocolos.ui.screens.EquiposScreen
 import com.induztek.protocolos.ui.screens.LoginScreen
@@ -134,6 +135,19 @@ class MainActivity : ComponentActivity() {
                                 ) { entrada ->
                                     EquipoFormScreen(
                                         codigo = entrada.arguments?.getString(Screen.ARG_CODIGO),
+                                        mainViewModel = mainViewModel
+                                    )
+                                }
+                                composable(
+                                    route = Screen.EquipoDetalle.route,
+                                    arguments = listOf(
+                                        navArgument(Screen.ARG_CODIGO) {
+                                            type = NavType.StringType
+                                        }
+                                    )
+                                ) { entrada ->
+                                    EquipoDetalleScreen(
+                                        codigo = entrada.arguments?.getString(Screen.ARG_CODIGO) ?: "",
                                         mainViewModel = mainViewModel
                                     )
                                 }
