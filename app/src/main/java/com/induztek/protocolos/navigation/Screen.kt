@@ -8,6 +8,7 @@ sealed class Screen(val route: String) {
     data object Usuarios : Screen("usuarios")
     data object Tipos : Screen("tipos")
     data object EquipoForm : Screen("equipo_form?codigo={codigo}")
+    data object EquipoDetalle : Screen("equipo_detalle/{codigo}")
     data object PruebaForm : Screen("prueba_form?id={id}")
     data object UsuarioForm : Screen("usuario_form?id={id}")
 
@@ -17,6 +18,8 @@ sealed class Screen(val route: String) {
 
         fun equipoForm(codigo: String? = null): String =
             if (codigo == null) "equipo_form" else "equipo_form?codigo=$codigo"
+
+        fun equipoDetalle(codigo: String): String = "equipo_detalle/$codigo"
 
         fun pruebaForm(id: Long? = null): String =
             if (id == null) "prueba_form" else "prueba_form?id=$id"
