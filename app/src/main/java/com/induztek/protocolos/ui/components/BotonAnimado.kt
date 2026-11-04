@@ -2,6 +2,8 @@ package com.induztek.protocolos.ui.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,9 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.induztek.protocolos.ui.utils.rememberEscalaPresion
 
-// Botón que responde al toque achicándose un poco
+// Botón lima redondeado que responde al toque achicándose un poco
 @Composable
 fun BotonAnimado(
     texto: String,
@@ -27,11 +31,14 @@ fun BotonAnimado(
         onClick = onClick,
         enabled = enabled,
         interactionSource = interactionSource,
-        modifier = modifier.graphicsLayer {
-            scaleX = escala
-            scaleY = escala
-        }
+        shape = RoundedCornerShape(28.dp),
+        modifier = modifier
+            .heightIn(min = 52.dp)
+            .graphicsLayer {
+                scaleX = escala
+                scaleY = escala
+            }
     ) {
-        Text(text = texto)
+        Text(text = texto, fontWeight = FontWeight.Bold)
     }
 }
