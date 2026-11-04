@@ -17,6 +17,7 @@ data class SesionUi(
     val sesion: Sesion? = null
 )
 
+// Sabe quién está conectado (y con qué rol) para todas las pantallas
 class SesionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val manager = SesionManager(application)
