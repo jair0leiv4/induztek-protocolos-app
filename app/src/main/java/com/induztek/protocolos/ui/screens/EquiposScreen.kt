@@ -1,5 +1,6 @@
 package com.induztek.protocolos.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,6 +45,7 @@ import com.induztek.protocolos.viewmodel.MainViewModel
 import com.induztek.protocolos.viewmodel.SesionViewModel
 
 // Lista de equipos (READ). El administrador además edita y elimina (UPDATE y DELETE).
+// Al tocar un equipo se abre su detalle.
 @Composable
 fun EquiposScreen(
     mainViewModel: MainViewModel,
@@ -99,7 +101,14 @@ fun EquiposScreen(
                     contentPadding = PaddingValues(bottom = 88.dp)
                 ) {
                     items(equipos, key = { it.codigo }) { equipo ->
-                        Card(modifier = Modifier.fillMaxWidth().animateItem()) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem()
+                                .clickable {
+                                    mainViewModel.navigateTo(Screen.equipoDetalle(equipo.codigo))
+                                }
+                        ) {
                             Row(
                                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
                                 verticalAlignment = Alignment.CenterVertically
