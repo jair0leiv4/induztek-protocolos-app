@@ -1,7 +1,9 @@
 package com.induztek.protocolos
 
+import com.induztek.protocolos.util.Seguridad
 import com.induztek.protocolos.util.Validators
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -39,6 +41,32 @@ class ValidatorsTest {
         assertNull(Validators.validatePassword("123456"))
     }
 
+    // ---------- Nombre y rol ----------
+    @Test
+    fun nombreVacio_devuelveError() {
+        assertEquals("El nombre es obligatorio", Validators.validateNombre(""))
+    }
+
+    @Test
+    fun nombreCorto_devuelveError() {
+        assertEquals("Debe tener al menos 3 caracteres", Validators.validateNombre("ab"))
+    }
+
+    @Test
+    fun nombreValido_noDevuelveError() {
+        assertNull(Validators.validateNombre("Ana"))
+    }
+
+    @Test
+    fun rolVacio_devuelveError() {
+        assertEquals("Selecciona un rol", Validators.validateRol(""))
+    }
+
+    @Test
+    fun rolValido_noDevuelveError() {
+        assertNull(Validators.validateRol("ADMIN"))
+    }
+
     // ---------- Código de equipo ----------
     @Test
     fun codigoVacio_devuelveError() {
@@ -55,7 +83,7 @@ class ValidatorsTest {
         assertNull(Validators.validateCodigo("TR-1042"))
     }
 
-    // ---------- Tipo e instalación ----------
+    // ---------- Tipo, instalación y selección de equipo ----------
     @Test
     fun tipoVacio_devuelveError() {
         assertEquals("Selecciona un tipo de equipo", Validators.validateTipo(""))
@@ -69,6 +97,11 @@ class ValidatorsTest {
     @Test
     fun instalacionValida_noDevuelveError() {
         assertNull(Validators.validateInstalacion("Sala 2"))
+    }
+
+    @Test
+    fun equipoSinSeleccionar_devuelveError() {
+        assertEquals("Selecciona un equipo", Validators.validateEquipoSeleccion(""))
     }
 
     // ---------- Tensión y aislación ----------
@@ -114,5 +147,19 @@ class ValidatorsTest {
     @Test
     fun fechaValida_noDevuelveError() {
         assertNull(Validators.validateFechaHora("15-10-2026 10:42"))
+    }
+
+    // ---------- Seguridad: la contraseña se guarda como huella SHA-256 ----------
+    @Test
+    fun sha256_calculaLaHuellaCorrecta() {
+        assertEquals(
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+            Seguridad.sha256("abc")
+        )
+    }
+
+    @Test
+    fun sha256_distintasContrasenasDanDistintasHuellas() {
+        assertNotEquals(Seguridad.sha256("Admin123"), Seguridad.sha256("Admin124"))
     }
 }

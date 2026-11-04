@@ -36,6 +36,7 @@ import androidx.core.content.ContextCompat
 import com.induztek.protocolos.util.Ubicacion
 import java.util.Locale
 
+// RECURSO NATIVO 2: ubicación (GPS). Pide el permiso en el momento de usarlo y avisa si lo niegan.
 @Composable
 fun SelectorUbicacion(
     latitud: Double?,

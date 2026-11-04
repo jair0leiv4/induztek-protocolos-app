@@ -1,0 +1,14 @@
+CODIGO FINAL - Induztek Protocolos (pasos B a E)
+
+1. Cierra Android Studio (o al menos no escribas nada mientras copias).
+2. Extrae ESTE zip directamente en la carpeta raiz del proyecto:
+   C:\Users\jairo\AndroidStudioProjects\InduztekProtocolos
+   (debe quedar la carpeta "app" que trae el zip mezclada con la tuya).
+   Cuando Windows pregunte, elige "Reemplazar los archivos en el destino".
+3. Borra los archivos viejos que ya no se usan (comandos en el chat).
+4. Abre Android Studio, aprieta File > Sync Project with Gradle Files y luego Build > Make Project.
+5. Ejecuta con el triangulo verde.
+
+Cuentas de demostracion:
+  Administrador: admin@induztek.cl / Admin123
+  Tecnico:       tecnico@induztek.cl / Tecnico123
