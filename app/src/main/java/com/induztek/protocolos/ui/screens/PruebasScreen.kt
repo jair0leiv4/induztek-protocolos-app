@@ -1,5 +1,6 @@
 package com.induztek.protocolos.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,11 +21,13 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,7 +38,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -72,10 +77,15 @@ fun PruebasScreen(
         mainViewModel = mainViewModel,
         sesionViewModel = sesionViewModel,
         botonFlotante = {
-            ExtendedFloatingActionButton(onClick = { mainViewModel.navigateTo(Screen.pruebaForm()) }) {
+            ExtendedFloatingActionButton(
+                onClick = { mainViewModel.navigateTo(Screen.pruebaForm()) },
+                shape = RoundedCornerShape(28.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Nueva prueba")
+                Text("Nueva prueba", fontWeight = FontWeight.Bold)
             }
         }
     ) {
@@ -87,13 +97,15 @@ fun PruebasScreen(
                 label = { Text("Filtrar por código de equipo") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 singleLine = true,
+                shape = RoundedCornerShape(28.dp),
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "${items.size} pruebas",
-                style = MaterialTheme.typography.bodyMedium,
+                text = "${items.size} PRUEBAS",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 12.dp)
             )
 
             if (items.isEmpty()) {
@@ -109,24 +121,71 @@ fun PruebasScreen(
                 ) {
                     items(items, key = { it.prueba.id }) { item ->
                         val p = item.prueba
-                        Card(modifier = Modifier.fillMaxWidth().animateItem()) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth().animateItem(),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                            )
+                        ) {
                             Row(
-                                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 8.dp),
+                                verticalAlignment = Alignment.Top
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(p.codigoEquipo, style = MaterialTheme.typography.titleMedium)
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            p.codigoEquipo,
+                                            style = MaterialTheme.typography.titleLarge,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        item.variacionAislacion?.let { v ->
+                                            val color = if (v < 0) MaterialTheme.colorScheme.error
+                                            else MaterialTheme.colorScheme.primary
+                                            ChipVariacion(texto = Formato.porcentaje(v), color = color)
+                                        }
+                                    }
                                     Text(
                                         Fechas.formatear(p.fechaMillis),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        "Tensión ${Formato.numero(p.tension)} V · Aislación ${Formato.numero(p.aislacion)} MΩ",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
+
+                                    Spacer(modifier = Modifier.height(12.dp))
+
+                                    Row(modifier = Modifier.fillMaxWidth()) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(
+                                                "TENSIÓN",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                "${Formato.numero(p.tension)} V",
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        }
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(
+                                                "AISLACIÓN",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                "${Formato.numero(p.aislacion)} MΩ",
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        }
+                                    }
+
                                     item.variacionAislacion?.let { v ->
+                                        Spacer(modifier = Modifier.height(8.dp))
                                         val texto = if (v < 0) {
                                             "Aislación bajó ${Formato.porcentaje(v)} respecto a la medición anterior"
                                         } else {
@@ -136,10 +195,11 @@ fun PruebasScreen(
                                             texto,
                                             style = MaterialTheme.typography.bodySmall,
                                             color = if (v < 0) MaterialTheme.colorScheme.error
-                                            else MaterialTheme.colorScheme.secondary
+                                            else MaterialTheme.colorScheme.primary
                                         )
                                     }
                                     if (p.latitud != null && p.longitud != null) {
+                                        Spacer(modifier = Modifier.height(4.dp))
                                         Text(
                                             "Ubicación: ${"%.4f".format(Locale.US, p.latitud)}, ${"%.4f".format(Locale.US, p.longitud)}",
                                             style = MaterialTheme.typography.bodySmall,
@@ -155,11 +215,12 @@ fun PruebasScreen(
                                     }
                                 }
                                 p.fotoPath?.let { ruta ->
+                                    Spacer(modifier = Modifier.width(8.dp))
                                     AsyncImage(
                                         model = File(ruta),
                                         contentDescription = "Foto de la placa del equipo",
                                         contentScale = ContentScale.Crop,
-                                        modifier = Modifier.size(64.dp).clip(RoundedCornerShape(8.dp))
+                                        modifier = Modifier.size(64.dp).clip(RoundedCornerShape(12.dp))
                                     )
                                 }
                                 if (puedeGestionar) {
@@ -195,6 +256,23 @@ fun PruebasScreen(
                 pruebaAEliminar = null
             },
             onCancelar = { pruebaAEliminar = null }
+        )
+    }
+}
+
+@Composable
+private fun ChipVariacion(texto: String, color: Color) {
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = color.copy(alpha = 0.15f),
+        border = BorderStroke(1.dp, color.copy(alpha = 0.6f))
+    ) {
+        Text(
+            text = texto,
+            color = color,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
         )
     }
 }
