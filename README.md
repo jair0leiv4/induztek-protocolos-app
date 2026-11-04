@@ -6,8 +6,8 @@ Proyecto de la asignatura **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc 
 
 ## Integrantes
 
-- Jairo Leiva ([@jair0leiv4](https://github.com/jair0leiv4))
-- Benjamin [apellido]
+- Jairo Leiva 
+- Benjamin Cisternas
 
 ## Problema que resuelve
 
